@@ -27,7 +27,7 @@
     {
       "customType": "regex",
       "managerFilePatterns": ["//Dockerfile$/", "//build.yaml$/"],
-      "datasourceTemplate": "docker",
+      "datasourceTemplate": "github-tags",
       "depNameTemplate": "BASE_IMAGE",
       "matchStringsStrategy": "any",
       "matchStrings": [
@@ -43,7 +43,7 @@
         "ARG BUILD_FROM=(?<depName>.*?):(?<currentValue>.*?)\\s+",
         "(aarch64|amd64):\\s[\"']?(?<depName>.*?):(?<currentValue>.*?)[\"']?\\s"
       ],
-      "datasourceTemplate": "docker"
+      "datasourceTemplate": "github-tags"
     }
   ],
   "packageRules": [
@@ -56,7 +56,7 @@
     },
     {
       "matchManagers": ["custom.regex"],
-      "matchDatasources": ["docker"],
+      "matchDatasources": ["github-tags"],
       "matchDepNames": ["BASE_IMAGE"],
       "matchUpdateTypes": ["major"],
       "commitMessagePrefix": "⬆️ MAJOR",
@@ -65,7 +65,7 @@
     },
     {
       "matchManagers": ["custom.regex"],
-      "matchDatasources": ["docker"],
+      "matchDatasources": ["github-tags"],
       "matchDepNames": ["BASE_IMAGE"],
       "matchUpdateTypes": ["minor", "patch"],
       "commitMessagePrefix": "⬆️",

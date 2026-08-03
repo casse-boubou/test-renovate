@@ -1,9 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "github>casse-boubou/.github//.github/renovate.json",
-    "docker:disable"
-  ],
+  "extends": ["github>casse-boubou/.github//.github/renovate.json"],
   "customManagers": [
     {
       "customType": "regex",

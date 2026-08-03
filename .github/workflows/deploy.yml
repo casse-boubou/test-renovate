@@ -132,7 +132,7 @@ jobs:
         # https://github.com/docker/login-action
         - name: Log in to the Container registry
           if: |
-            (github.event_name == 'push' && github.event.pusher.username == github.repository_owner) ||
+            (github.event_name == 'push' && github.triggering_actor == github.repository_owner) ||
              github.event_name == 'pull_request' ||
              github.event_name == 'release'
           uses: docker/login-action@abd2ef45e78c5afb21d64d4ca52ee8550d9572c7 # v4.5.1
@@ -151,7 +151,7 @@ jobs:
             tags: |
               # Following TAG are for tag the branche
               type=raw,value=main,enable=${{ github.ref == 'refs/heads/main' }}
-              type=ref,event=branch,enable=${{ github.ref_name != 'main' }}
+              type=ref,event=branch,enable=${{ github.event_name == 'pull_request' }}
               type=sha,prefix=sha-,format=short,enable=true
               # Following TAG are applied IF event from 'release'
               type=raw,value=latest,enable=${{ github.event_name == 'release' }}
@@ -213,7 +213,7 @@ jobs:
             context: ./docker
             file: ./docker/Dockerfile
             platforms: linux/amd64
-            push: ${{ (github.event_name == 'push' && github.event.pusher.username == github.repository_owner) || github.event_name == 'pull_request' || github.event_name == 'release' }}
+            push: ${{ (github.event_name == 'push' && github.triggering_actor == github.repository_owner) || github.event_name == 'pull_request' || github.event_name == 'release' }}
             tags: ${{ steps.metadata.outputs.tags }}
             labels: ${{ steps.metadata.outputs.labels }}
             cache-from: type=gha

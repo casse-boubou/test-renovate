@@ -67,8 +67,7 @@
       "matchUpdateTypes": ["minor", "patch"],
       "commitMessagePrefix": "⬆️",
       "commitMessageTopic": "App Base Image",
-      "groupName": "HomeAssistant App Base Image",
-      "automerge": true
+      "groupName": "HomeAssistant App Base Image"
     }
   ]
 }

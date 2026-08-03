@@ -130,8 +130,9 @@ jobs:
         # https://github.com/docker/login-action
         - name: Log in to the Container registry
           if: |
-            (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
-            github.event_name == 'release'
+            (github.event_name == 'push' && github.event.pusher.username == github.repository_owner) ||
+             github.event_name == 'pull_request' ||
+             github.event_name == 'release'
           uses: docker/login-action@abd2ef45e78c5afb21d64d4ca52ee8550d9572c7 # v4.5.1
           with:
             registry: ${{ env.REGISTRY }}
@@ -165,7 +166,7 @@ jobs:
             context: ./docker
             file: ./docker/Dockerfile
             # platforms: linux/amd64
-            push: ${{ (github.event_name == 'push' && github.event.pusher.username == github.repository_owner ) || github.event_name == 'pull_request' || github.event_name == 'release' }}
+            push: ${{ (github.event_name == 'push' && github.event.pusher.username == github.repository_owner) || github.event_name == 'pull_request' || github.event_name == 'release' }}
             tags: ${{ steps.metadata.outputs.tags }}
             labels: ${{ steps.metadata.outputs.labels }}
             cache-from: type=gha

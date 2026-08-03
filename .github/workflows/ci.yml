@@ -7,7 +7,6 @@ on:
 
 concurrency:
   group: ${{ github.ref }}
-  queue: max
 
 env:
   USERNAME: ${{ github.repository_owner }}

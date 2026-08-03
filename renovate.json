@@ -4,6 +4,9 @@
     "github>casse-boubou/.github//.github/renovate.json",
     "docker:disable"
   ],
+  "prHourlyLimit": 0,
+  "minimumReleaseAge": "3 days",
+  "minimumReleaseAgeBehaviour": "timestamp-optional",
   "customManagers": [
     {
       "customType": "regex",

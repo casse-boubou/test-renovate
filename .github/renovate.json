@@ -6,6 +6,7 @@
   ],
   "schedule": ["* * * * *"],
   "prHourlyLimit": 0,
+  "minimumReleaseAge": "1 days",
   "customManagers": [
     {
       "customType": "regex",

@@ -1,4 +1,4 @@
-ARG ALPINE_BASE_IMAGE_VERSION="3.23@sha256:fd791d74b68913cbb027c6546007b3f0d3bc45125f797758156952bc2d6daf40"
+ARG ALPINE_BASE_IMAGE_VERSION="3.23"
 ####################
 # BUILD LAZYMC
 ####################
@@ -8,7 +8,7 @@ ARG LAZYMC_VERSION="v0.2.10"
 RUN echo "Installing base packages" \
     && apk --update --no-cache add \
     cargo=1.96.1-r0 \
-    git=2.54.0-r0
+    git=2.52.0-r0
 RUN wget -q --no-verbose https://github.com/timvisee/lazymc/archive/refs/tags/${LAZYMC_VERSION}.zip && \
     unzip ${LAZYMC_VERSION}.zip -q -d lazymc-${LAZYMC_VERSION} && \
     mv lazymc-${LAZYMC_VERSION}/lazymc-* lazymc

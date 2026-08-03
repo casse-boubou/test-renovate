@@ -158,6 +158,45 @@ jobs:
               type=semver,pattern={{version}},prefix=v,enable=${{ github.event_name == 'release' }}
         - name: Debug metadata
           run: |
+            echo "github.ref:"
+            echo "${{ github.ref }}"
+            echo
+            echo "github.ref_name:"
+            echo "${{ github.ref_name }}"
+            echo
+            echo "action:"
+            echo "${{ github.action }}"
+            echo
+            echo "action_path:"
+            echo "${{ github.action_path }}"
+            echo
+            echo "action_ref:"
+            echo "${{ github.action_ref }}"
+            echo
+            echo "actor:"
+            echo "${{ github.actor }}"
+            echo
+            echo "event:"
+            echo "${{ github.event }}"
+            echo
+            echo "event_name:"
+            echo "${{ github.event_name }}"
+            echo
+            echo "head_ref:"
+            echo "${{ github.head_ref }}"
+            echo
+            echo "ref_type:"
+            echo "${{ github.ref_type }}"
+            echo
+            echo "repository_owner:"
+            echo "${{ github.repository_owner }}"
+            echo
+            echo "retention_days:"
+            echo "${{ github.retention_days }}"
+            echo
+            echo "triggering_actor:"
+            echo "${{ github.triggering_actor }}"
+            echo
             echo "Tags:"
             echo "${{ steps.metadata.outputs.tags }}"
             echo

@@ -7,7 +7,7 @@
   "prHourlyLimit": 0,
   "minimumReleaseAge": "3 days",
   "minimumReleaseAgeBehaviour": "timestamp-optional",
-  "prCreation": "approval",
+  "prCreation": "status-success",
   "customManagers": [
     {
       "customType": "regex",

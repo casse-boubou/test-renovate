@@ -15,6 +15,7 @@ on:
 
 concurrency:
   group: ${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   USERNAME: ${{ github.repository_owner }}

@@ -117,8 +117,8 @@ jobs:
           with:
             persist-credentials: false
 
-        - name: Set up QEMU
-          uses: docker/setup-qemu-action@v4
+        # - name: Set up QEMU
+        #   uses: docker/setup-qemu-action@v4
 
         # Set up BuildKit Docker container builder to be able to build
         # multi-platform images and export cache
@@ -164,7 +164,7 @@ jobs:
           with:
             context: ./docker
             file: ./docker/Dockerfile
-            platforms: linux/amd64
+            # platforms: linux/amd64
             push: ${{ (github.event_name == 'push' && github.event.pusher.username == github.repository_owner ) || github.event_name == 'pull_request' || github.event_name == 'release' }}
             tags: ${{ steps.metadata.outputs.tags }}
             labels: ${{ steps.metadata.outputs.labels }}

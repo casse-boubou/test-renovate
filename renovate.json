@@ -20,10 +20,10 @@
       "customType": "regex",
       "managerFilePatterns": ["/(^|/)Dockerfile$/"],
       "datasourceTemplate": "github-tags",
-      "packageNameTemplate": "eikek/sharry",
-      "depNameTemplate": "Sharry",
+      "packageNameTemplate": "rustdesk/rustdesk-server",
+      "depNameTemplate": "Rustdesk-server",
       "matchStrings": [
-        "(ARG)\\s(SHARRY.*_VERSION)=\"(?<currentValue>v?[0-9]+\\.[0-9]+(\\.[0-9]+){0,1})\"\\n"
+        "(ARG)\\s(RUSTDESK_SERVER.*_VERSION)=\"(?<currentValue>v?[0-9]+\\.[0-9]+(\\.[0-9]+){0,1})\"\\n"
       ],
       "versioningTemplate": "loose"
     },
@@ -53,7 +53,7 @@
     {
       "matchManagers": ["custom.regex"],
       "matchDatasources": ["github-tags"],
-      "matchDepNames": ["eikek/sharry"],
+      "matchDepNames": ["rustdesk/rustdesk-server"],
       "commitMessagePrefix": "✨",
       "commitMessageTopic": "{{depName}}"
     },

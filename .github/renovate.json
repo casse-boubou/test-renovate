@@ -4,6 +4,8 @@
     "github>casse-boubou/.github//.github/renovate.json",
     "docker:pinDigests"
   ],
+  "schedule": ["* * * * *"],
+  "prHourlyLimit": 0,
   "customManagers": [
     {
       "customType": "regex",

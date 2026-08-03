@@ -21,7 +21,7 @@ on:
   workflow_dispatch:
 
 env:
-  USERNAME: ${{ github.actor }}
+  USERNAME: ${{ github.repository_owner }}
   PASSWORD: ${{ secrets.GITHUB_TOKEN }}
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
@@ -117,6 +117,11 @@ jobs:
           with:
             persist-credentials: false
 
+        # Set up QEMU for allow possibility to buil multi arch
+        # https://github.com/docker/setup-qemu-action
+        - name: Set up QEMU
+          uses: docker/setup-qemu-action@06116385d9baf250c9f4dcb4858b16962ea869c3 # v4.2.0
+
         # Set up BuildKit Docker container builder to be able to build
         # multi-platform images and export cache
         # https://github.com/docker/setup-buildx-action
@@ -127,8 +132,9 @@ jobs:
         # https://github.com/docker/login-action
         - name: Log in to the Container registry
           if: |
-            (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
-            github.event_name == 'release'
+            (github.event_name == 'push' && github.triggering_actor == github.repository_owner) ||
+             github.event_name == 'pull_request' ||
+             github.event_name == 'release'
           uses: docker/login-action@abd2ef45e78c5afb21d64d4ca52ee8550d9572c7 # v4.5.1
           with:
             registry: ${{ env.REGISTRY }}
@@ -143,19 +149,63 @@ jobs:
           with:
             images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
             tags: |
-              # Following TAG are applied IF event from 'push' on repo
-              type=raw,value=main,enable=${{ github.event_name == 'push' }}
-              type=sha,prefix=sha-,format=short,enable=${{ github.event_name == 'push' }}
-              # Following TAG are applied IF 'push' from other branch than 'main'
-              type=ref,event=branch,enable=${{ github.ref_name != 'main' }}
+              # Following TAG are for tag the branche
+              type=raw,value=main,enable=${{ github.ref == 'refs/heads/main' }}
+              type=raw,value=${{ github.head_ref }},enable=${{ github.event_name == 'pull_request' }}
+              # Following TAG are always apply
+              type=sha,prefix=sha-,format=short,enable=true
               # Following TAG are applied IF event from 'release'
               type=raw,value=latest,enable=${{ github.event_name == 'release' }}
               type=semver,pattern={{version}},prefix=v,enable=${{ github.event_name == 'release' }}
-            labels: |
-              org.opencontainers.image.source="https://github.com/casse-boubou/lazymc-for-crafty"
+        - name: Debug metadata
+          run: |
+            echo "github.ref:"
+            echo "${{ github.ref }}"
+            echo
+            echo "github.ref_name:"
+            echo "${{ github.ref_name }}"
+            echo
+            echo "action:"
+            echo "${{ github.action }}"
+            echo
+            echo "action_path:"
+            echo "${{ github.action_path }}"
+            echo
+            echo "action_ref:"
+            echo "${{ github.action_ref }}"
+            echo
+            echo "actor:"
+            echo "${{ github.actor }}"
+            echo
+            echo "event:"
+            echo "${{ github.event }}"
+            echo
+            echo "event_name:"
+            echo "${{ github.event_name }}"
+            echo
+            echo "head_ref:"
+            echo "${{ github.head_ref }}"
+            echo
+            echo "ref_type:"
+            echo "${{ github.ref_type }}"
+            echo
+            echo "repository_owner:"
+            echo "${{ github.repository_owner }}"
+            echo
+            echo "retention_days:"
+            echo "${{ github.retention_days }}"
+            echo
+            echo "triggering_actor:"
+            echo "${{ github.triggering_actor }}"
+            echo
+            echo "Tags:"
+            echo "${{ steps.metadata.outputs.tags }}"
+            echo
+            echo "Labels:"
+            echo "${{ steps.metadata.outputs.labels }}"
 
               # XXXXXXX SEE   https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-jobs-with-conditions
-        # Build and push Docker image with Buildx (don't push on PR)
+        # Build and push Docker image with Buildx (build if release, PR or push by autor)
         # https://github.com/docker/build-push-action
         - name: Build and push Docker image
           id: build-and-push
@@ -163,7 +213,8 @@ jobs:
           with:
             context: ./docker
             file: ./docker/Dockerfile
-            push: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'release' }}
+            platforms: linux/amd64
+            push: ${{ (github.event_name == 'push' && github.triggering_actor == github.repository_owner) || github.event_name == 'pull_request' || github.event_name == 'release' }}
             tags: ${{ steps.metadata.outputs.tags }}
             labels: ${{ steps.metadata.outputs.labels }}
             cache-from: type=gha
